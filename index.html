@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="pageTitle">Ebnou-Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
@@ -16,7 +16,7 @@
         <select id="langSelect">
             <option value="ar">العربية (AR)</option>
             <option value="en">English (EN)</option>
-            <option value="fr">Français (FR)</option>
+            <option value="fr" selected>Français (FR)</option>
         </select>
         <select id="currencySelect">
             <option value="XOF">FCFA (CFA)</option>
@@ -30,20 +30,20 @@
                 <button id="loginTab" class="active">تسجيل الدخول</button>
                 <button id="signupTab">إنشاء حساب</button>
             </div>
-            <form id="authForm">
+            <form id="authForm" style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="input-group">
                     <label id="emailLabel">البريد الإلكتروني</label>
-                    <input type="email" id="authEmail" required>
+                    <input type="email" id="authEmail" required style="font-size: 16px;">
                 </div>
                 <div class="input-group">
                     <label id="passwordLabel">كلمة المرور</label>
-                    <input type="password" id="authPassword" required>
+                    <input type="password" id="authPassword" required style="font-size: 16px;">
                 </div>
                 <div class="input-group" id="confirmPasswordGroup" style="display: none;">
                     <label id="confirmPasswordLabel">تأكيد كلمة المرور</label>
-                    <input type="password" id="authConfirmPassword">
+                    <input type="password" id="authConfirmPassword" style="font-size: 16px;">
                 </div>
-                <button type="submit" class="main-btn" id="mainBtn">دخول</button>
+                <button type="submit" class="main-btn" id="mainBtn">Se Connecter</button>
             </form>
             <button id="forgotPasswordBtn" style="background: none; border: none; color: #2563eb; margin-top: 15px; cursor: pointer; text-decoration: underline; width: 100%;">نسيت كلمة المرور؟</button>
         </div>
@@ -51,9 +51,9 @@
 
     <div id="storeSection" style="display: none;">
         <div style="display: flex; justify-content: flex-end; padding: 10px;">
-        <button id="logoutBtn" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">
-            Déconnexion
-        </button>
+            <button id="logoutBtn" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none;">
+                Déconnexion 🚪
+            </button>
         </div>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="ابحث عن منتج ...">
@@ -62,53 +62,9 @@
         <div class="products-grid"></div>
     </div>
 
-    <div id="checkoutModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; direction: rtl;">
-        <div style="background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; max-height: 90vh; overflow-y: auto;">
-            <h3 style="color: #1e293b; margin-top: 0;">إتمام الطلب</h3>
-            <p>المنتج: <span id="checkoutProductName" style="font-weight: bold;"></span></p>
-            <p style="font-size: 1.1rem;">المبلغ الإجمالي: <span id="checkoutTotal" style="font-weight: bold; color: #2563eb; font-size: 1.3rem;"></span></p>
-            
-            <div id="paymentSelection">
-                <p style="color: #64748b; margin-bottom: 20px;">اختر طريقة الدفع المناسبة لك:</p>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <button class="pay-method-btn" data-method="wave" style="background: #00a0e3; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold;">🌊 تطبيق Wave (السنغال)</button>
-                    <button class="pay-method-btn" data-method="bankily" style="background: #eab308; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold;">🏦 تطبيق بنكيلي - Bankily</button>
-                </div>
-            </div>
-
-            <div id="manualPaymentDetails" style="display: none; text-align: right; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1;">
-                <h4 id="manualPayTitle" style="color: #2563eb; margin-top: 0; text-align: center;"></h4>
-                <p>1. قم بتحويل المبلغ إلى الرقم التالي:</p>
-                <div style="background: #e2e8f0; padding: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px;" id="merchantPhone"></div>
-                <p style="font-size: 0.9rem; color: #ef4444;">الاسم: AHMED SALEM EBNOU</p>
-                
-                <p>2. أدخل عنوانك التفصيلي للشحن:</p>
-                <input type="text" id="shippingAddress" placeholder="المدينة، الحي، رقم الهاتف..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box;">
-                
-                <button id="confirmOrderBtn" style="width: 100%; background: #16a34a; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">✅ تأكيد وتحويل للواتساب</button>
-            </div>
-            <button id="closeCheckout" style="margin-top: 20px; background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline;">إلغاء والعودة</button>
-        </div>
+    <div id="imageOverlay" class="image-overlay" onclick="this.style.display='none'">
+        <img id="fullImage" src="" alt="Zoom">
     </div>
-
-    <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; direction: rtl;">
-        <div style="background: white; padding: 40px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center;">
-            <h2 style="color: #16a34a; margin-top: 0;">🎉 تم توجيه طلبك للواتساب!</h2>
-            <p style="font-size: 1.1rem; color: #334155; line-height: 1.6;">الرجاء إرسال الرسالة الجاهزة في الواتساب مع إرفاق صورة التحويل لتأكيد طلبك.</p>
-            <button id="closeSuccessBtn" style="margin-top: 20px; background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem;">حسناً</button>
-        </div>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer-content">
-            <h3>CONTACT US</h3>
-            <p>للدعم: Mhdebnou57@gmail.com</p>
-            <p>رقم الواتساب: 27070586 222+</p>
-            <p>رقم الهاتف: 784715094 221+ </p>
-            <hr style="border-color: #334155; margin: 15px 0;">
-            <p>جميع الحقوق محفوظة &copy; 2026 | تطوير: <strong>AHMED SALEM EBNOU</strong></p>
-        </div>
-    </footer>
 
     <script type="module" src="js/script.js"></script>
 </body>
