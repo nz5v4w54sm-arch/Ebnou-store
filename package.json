@@ -1,0 +1,12 @@
+{
+  "name": "ebnou-store",
+  "version": "1.0.0",
+  "description": "Ebnou Store - E-commerce platform",
+  "scripts": {
+    "build": "echo 'No build needed for static site'",
+    "test": "echo 'No tests configured'"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^1.3.1"
+  }
+}
