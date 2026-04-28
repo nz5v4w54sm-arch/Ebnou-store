@@ -78,7 +78,7 @@ function renderProducts() {
 }
 
 const contactData = {
-    whatsapp: "221784715094",
+    whatsapp: "784715094",
     wave: "784715094",
     bankily: "27070586",
 };
