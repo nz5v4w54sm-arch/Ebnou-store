@@ -1,85 +1,79 @@
-/* إعادة الضبط لنظام الشبكة (Grid) - Ebnou Store */
+/* الأساسيات */
 body {
-    font-family: sans-serif;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; padding: 0;
     background-color: #f4f7f6;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* يوسط الصفحة كاملة */
+    text-align: center; /* توسيط النصوص افتراضياً */
 }
 
-/* 1. خانة البحث - في الأعلى والمنتصف */
-#searchBar {
-    width: 80%;
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 12px;
-    border-radius: 25px;
-    border: 2px solid #007bff;
-    text-align: center;
-    display: block;
-    outline: none;
+/* شريط اللغة والعملة */
+.top-bar {
+    display: flex; justify-content: center;
+    gap: 10px; padding: 15px;
+    background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* 2. شبكة المنتجات (4 أو 5 في الصف) */
-.product-grid {
+/* نظام الشبكة الطبيعي (4-5 منتجات في الصف) */
+.products-grid {
     display: grid !important;
-    /* هذا السطر يوزعها تلقائياً (4-5 في الـ PC و 2 في الهاتف) */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; 
-    gap: 20px !important;
-    padding: 20px !important;
-    width: 95% !important;
-    max-width: 1200px !important;
-    margin: 0 auto !important;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 20px !important; padding: 20px !important;
+    max-width: 1200px; margin: 0 auto !important;
 }
 
-/* 3. بطاقة المنتج - مربعة ومنتظمة */
+/* بطاقة المنتج وتوسيط محتواها */
 .product-card {
     background: white !important;
-    border: 1px solid #eee !important;
     border-radius: 12px !important;
     padding: 15px !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important; /* توسيط المحتوى */
+    align-items: center !important; /* توسيط عمودي للصور والسعر */
     text-align: center !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
     transition: 0.3s;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
+.product-image {
+    width: 100% !important; height: 180px !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    margin-bottom: 15px !important;
+    border-radius: 8px;
 }
 
-/* 4. الصور داخل المربعات */
-.product-card img {
-    width: 100% !important;
-    height: 150px !important;
-    object-fit: contain !important;
-    margin-bottom: 10px !important;
+/* السعر والزر في المنتصف تماماً */
+.price {
+    font-size: 1.2rem; font-weight: bold;
+    color: #2980b9; margin: 10px 0 !important;
+    width: 100% !important; text-align: center !important;
 }
 
-/* 5. الاسم والسعر والزر - في المنتصف تماماً */
-.product-card h3 {
-    font-size: 14px !important;
-    height: 40px;
-    overflow: hidden;
-}
-
-.product-card p {
-    color: #007bff !important;
+.buy-btn {
+    width: 85% !important; padding: 10px !important;
+    background-color: #27ae60 !important;
+    color: white !important; border: none !important;
+    border-radius: 5px !important; cursor: pointer;
     font-weight: bold !important;
-    margin: 10px 0 !important;
 }
 
-.product-card button {
-    width: 90% !important;
-    padding: 8px !important;
-    background-color: #007bff !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
+/* تنسيق الصورة المكبرة */
+.image-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); display: none;
+    justify-content: center; align-items: center;
+    z-index: 10000; cursor: zoom-out;
+}
+#fullImage { max-width: 90%; max-height: 85%; border-radius: 10px; }
+
+/* تنسيق تسجيل الدخول المنظم */
+.auth-card {
+    background: white; padding: 30px; border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%; max-width: 400px; margin: 50px auto;
+}
+.input-group input {
+    width: 100%; padding: 12px; border: 1px solid #ddd;
+    border-radius: 8px; font-size: 16px;
 }
