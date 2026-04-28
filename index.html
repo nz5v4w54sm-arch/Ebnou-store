@@ -1,27 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlTag">
+<html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <meta property="og:image" content="whatsapp-banner.png">
-    <meta property="og:title" content="Ebnou-Store | Sénégal">
-    <meta property="og:url" content="https://ebnou-store.vercel.app/">
-    <meta property="og:description" content="Bienvenue chez Ebnou Store - Votre boutique préférée au Sénégal">
-    
-    <title id="pageTitle">Ebnou-Store</title>
-    
+    <title>Ebnou-Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="my-logo.png">
-    <link rel="apple-touch-icon" href="my-logo.png">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     
     <div class="top-bar">
         <select id="langSelect">
             <option value="ar">العربية (AR)</option>
-            <option value="en">English (EN)</option>
             <option value="fr" selected>Français (FR)</option>
         </select>
         <select id="currencySelect">
@@ -33,46 +23,35 @@
     <div id="authSection" class="auth-container">
         <div class="auth-card">
             <div class="auth-tabs">
-                <button id="loginTab" class="active">تسجيل الدخول</button>
-                <button id="signupTab">إنشاء حساب</button>
+                <button id="loginTab" class="active" onclick="switchAuth('login')">Connexion</button>
+                <button id="signupTab" onclick="switchAuth('signup')">Inscription</button>
             </div>
-            <form id="authForm" style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="input-group">
-                    <label id="emailLabel">البريد الإلكتروني</label>
-                    <input type="email" id="authEmail" required style="font-size: 16px;">
+
+            <form id="authForm">
+                <div class="input-group" id="nameGroup" style="display: none;">
+                    <input type="text" id="authName" placeholder="Nom Complet">
                 </div>
                 <div class="input-group">
-                    <label id="passwordLabel">كلمة المرور</label>
-                    <input type="password" id="authPassword" required style="font-size: 16px;">
+                    <input type="email" id="authEmail" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="authPassword" placeholder="Mot de passe" required>
                 </div>
                 <div class="input-group" id="confirmPasswordGroup" style="display: none;">
-                    <label id="confirmPasswordLabel">تأكيد كلمة المرور</label>
-                    <input type="password" id="authConfirmPassword" style="font-size: 16px;">
+                    <input type="password" id="authConfirmPassword" placeholder="Confirmer mot de passe">
                 </div>
-                <button type="submit" class="main-btn" id="mainBtn">Se Connecter</button>
+                <button type="submit" class="buy-btn" id="mainBtn" style="width: 100% !important;">Se Connecter</button>
             </form>
-            <button id="forgotPasswordBtn" style="background: none; border: none; color: #2563eb; margin-top: 15px; cursor: pointer; text-decoration: underline; width: 100%;">نسيت كلمة المرور؟</button>
         </div>
     </div>
 
     <div id="storeSection" style="display: none;">
-        <div style="display: flex; justify-content: flex-end; padding: 10px;">
-            <button id="logoutBtn" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none;">
-                Déconnexion 🚪
-            </button>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="ابحث عن منتج ...">
-        </div>
-        
-        <h2 id="productsTitle" class="section-title">المنتجات المتاحة</h2>
-        
+        <button onclick="handleSignOut()" style="margin: 10px; background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Déconnexion</button>
         <div class="products-grid"></div>
     </div>
 
     <div id="imageOverlay" class="image-overlay" onclick="this.style.display='none'">
-        <img id="fullImage" src="" alt="Zoom">
+        <img id="fullImage" src="">
     </div>
 
     <script type="module" src="js/script.js"></script>
