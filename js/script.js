@@ -54,7 +54,7 @@ function renderProducts() {
     importedProducts.forEach(p => {
         let finalPrice = currentCurrency === 'XOF' ? 
             Math.round(p.originalPriceCFA) : 
-            Math.round(p.originalPriceCFA * 0.068);
+            Math.round(p.originalPriceCFA * 0.075);
 
         const card = document.createElement('div');
         card.className = 'product-card';
