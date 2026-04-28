@@ -10,7 +10,7 @@ const firebaseConfig = {
   messagingSenderId: "28443393930",
   appId: "1:28443393930:web:2ba0d8f17fe66d52db9273"
 };
-
+const rate = 0.075; // <--- غير هذا الرقم هنا فقط
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -23,6 +23,7 @@ const translations = { ar: { buyBtn: "شراء الآن" }, fr: { buyBtn: "Achet
 
 // --- وظيفة التبديل بين الدخول والإنشاء ---
 window.switchAuth = (mode) => {
+    window.rate = 0.075; // أو السعر الذي تفضله
     currentMode = mode;
     const nameGroup = document.getElementById('nameGroup');
     const confirmGroup = document.getElementById('confirmPasswordGroup');
@@ -47,6 +48,10 @@ window.switchAuth = (mode) => {
 
 // --- عرض المنتجات ---
 function renderProducts() {
+    const isMRU = currentCurrency === 'MRU';
+// هنا نستخدم window.rate الذي عرفته أنت في السطر 26
+    const calculatedPrice = isMRU ? (product.price * window.rate).toFixed(2) : product.price;
+    const currencySymbol = currencySymbols[currentCurrency]; // سيأخذ الاختصار من السطر 21 عندك
     const productsGrid = document.querySelector('.products-grid');
     if (!productsGrid) return;
     productsGrid.innerHTML = '';
@@ -54,7 +59,7 @@ function renderProducts() {
     importedProducts.forEach(p => {
         let finalPrice = currentCurrency === 'XOF' ? 
             Math.round(p.originalPriceCFA) : 
-            Math.round(p.originalPriceCFA * 0.075);
+            Math.round(p.originalPriceCFA * 0.064);
 
         const card = document.createElement('div');
         card.className = 'product-card';
@@ -62,7 +67,7 @@ function renderProducts() {
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
                 <h3>${p.name[currentLang] || p.name.fr}</h3>
-                <p class="price-tag">${finalPrice.toLocaleString()} ${currencySymbols[currentCurrency]}</p>
+                <p class="price-tag">${finalPrice.toLocaleString()} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}</p>
                 <button class="buy-btn">${translations[currentLang].buyBtn}</button>
             </div>
         `;
@@ -80,7 +85,7 @@ document.getElementById('authForm').onsubmit = async (e) => {
         const name = document.getElementById('authName').value;
         const confirmPass = document.getElementById('authConfirmPassword').value;
 
-        if (password !== confirmPass) { alert("كلمات السر غير متطابقة!"); return; }
+        if (password !== confirmPass) { alert("les mots de passe ne correspondent pas !"); return; }
         
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
