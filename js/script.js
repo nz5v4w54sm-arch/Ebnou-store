@@ -85,43 +85,36 @@ const contactData = {
 
 let selectedProduct = "";
 
-function openPayment(name, price) {
+window.openPayment = (name, price) => {
     selectedProduct = `${name} (${price})`;
-    document.getElementById('paymentModal').style.display = 'flex';
-}
+    const modal = document.getElementById('paymentModal');
+    if (modal) modal.style.display = 'flex';
+};
 
-function closePayment() {
-    document.getElementById('paymentModal').style.display = 'none';
-}
+window.closePayment = () => {
+    const modal = document.getElementById('paymentModal');
+    if (modal) modal.style.display = 'none';
+};
 
-function showDetails(method) {
+window.showDetails = (method) => {
     const detailsDiv = document.getElementById('paymentDetails');
     const instructions = document.getElementById('paymentInstructions');
-    detailsDiv.style.display = 'block';
+    if (detailsDiv) detailsDiv.style.display = 'block';
 
     if (method === 'wave') {
         instructions.innerHTML = `Envoyez le paiement vers Wave (Sénégal) : <br> <span style="font-size: 1.4rem; color: #00a0ff;">${contactData.wave}</span>`;
     } else {
         instructions.innerHTML = `Envoyez le paiement vers Bankily (Mauritanie) : <br> <span style="font-size: 1.4rem; color: #1d1d1d;">${contactData.bankily}</span>`;
     }
-}
+};
 
-function confirmOrder() {
+window.confirmOrder = () => {
     const address = document.getElementById('deliveryAddress').value;
     if (!address) {
         alert("Veuillez entrer votre adresse de livraison !");
         return;
     }
-
-    // تنبيه لقطة الشاشة بالفرنسية
-    const alertMsg = `⚠️ IMPORTANT :\n\nVeuillez prendre une CAPTURE D'ÉCRAN de la confirmation de paiement.\nVous devez envoyer cette capture sur WhatsApp avec votre commande pour confirmer l'achat.\n\nAdresse : ${address}`;
-    alert(alertMsg);
-
-    const message = `Bonjour Ebnou Store,\nJe souhaite acheter : ${selectedProduct}\nAdresse : ${address}\n(Je vais envoyer la capture d'écran du paiement maintenant)`;
-    const url = `https://wa.me/${contactData.whatsapp}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-}
-
+};
 // --- معالجة تسجيل الدخول / إنشاء الحساب ---
 document.getElementById('authForm').onsubmit = async (e) => {
     e.preventDefault();
