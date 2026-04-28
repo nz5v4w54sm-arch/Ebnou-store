@@ -1,8 +1,7 @@
 import { importedProducts } from './products.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-// إعدادات Firebase (التي أرسلتها)
 const firebaseConfig = {
   apiKey: "AIzaSyCI60T3r88_PBhRxc9zV2tCeGC59GbOW4A",
   authDomain: "ebnou-store.firebaseapp.com",
@@ -15,12 +14,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// المتغيرات الأساسية
 let currentCurrency = 'XOF';
 let currentLang = 'fr';
+let currentMode = 'login';
 const currencySymbols = { XOF: 'FCFA', MRU: 'UM' };
-const translations = { ar: { buyBtn: "شراء الآن" }, en: { buyBtn: "Buy Now" }, fr: { buyBtn: "Acheter" } };
+const translations = { ar: { buyBtn: "شراء الآن" }, fr: { buyBtn: "Acheter" } };
 
-// دالة عرض المنتجات المحسنة (تضمن التوسيط)
+// --- وظيفة التبديل بين الدخول والإنشاء ---
+window.switchAuth = (mode) => {
+    currentMode = mode;
+    const nameGroup = document.getElementById('nameGroup');
+    const confirmGroup = document.getElementById('confirmPasswordGroup');
+    const mainBtn = document.getElementById('mainBtn');
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+
+    if (mode === 'signup') {
+        nameGroup.style.display = 'block';
+        confirmGroup.style.display = 'block';
+        mainBtn.innerText = "Créer mon compte";
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+    } else {
+        nameGroup.style.display = 'none';
+        confirmGroup.style.display = 'none';
+        mainBtn.innerText = "Se Connecter";
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+    }
+};
+
+// --- عرض المنتجات ---
 function renderProducts() {
     const productsGrid = document.querySelector('.products-grid');
     if (!productsGrid) return;
@@ -37,7 +62,7 @@ function renderProducts() {
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
                 <h3>${p.name[currentLang] || p.name.fr}</h3>
-                <p class="price">${finalPrice.toLocaleString()} ${currencySymbols[currentCurrency]}</p>
+                <p class="price-tag">${finalPrice.toLocaleString()} ${currencySymbols[currentCurrency]}</p>
                 <button class="buy-btn">${translations[currentLang].buyBtn}</button>
             </div>
         `;
@@ -45,14 +70,31 @@ function renderProducts() {
     });
 }
 
-// نافذة تكبير الصور
-window.openImage = (src) => {
-    const overlay = document.getElementById('imageOverlay');
-    document.getElementById('fullImage').src = src;
-    overlay.style.display = 'flex';
+// --- معالجة تسجيل الدخول / إنشاء الحساب ---
+document.getElementById('authForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    if (currentMode === 'signup') {
+        const name = document.getElementById('authName').value;
+        const confirmPass = document.getElementById('authConfirmPassword').value;
+
+        if (password !== confirmPass) { alert("كلمات السر غير متطابقة!"); return; }
+        
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: name });
+            alert("Bienvenue " + name);
+        } catch (error) { alert(error.message); }
+    } else {
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) { alert("خطأ: " + error.message); }
+    }
 };
 
-// التحكم في حالة المستخدم (Firebase)
+// --- مراقبة حالة المستخدم ---
 onAuthStateChanged(auth, (user) => {
     const authSection = document.getElementById('authSection');
     const storeSection = document.getElementById('storeSection');
@@ -66,12 +108,18 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// تفعيل تسجيل الدخول
-document.getElementById('authForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('authEmail').value;
-    const password = document.getElementById('authPassword').value;
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) { alert("Error: " + error.message); }
+// --- تغيير العملة ---
+document.getElementById('currencySelect').addEventListener('change', (e) => {
+    currentCurrency = e.target.value;
+    renderProducts();
+});
+
+// --- تسجيل الخروج ---
+window.handleSignOut = () => signOut(auth);
+
+// --- تكبير الصور ---
+window.openImage = (src) => {
+    const overlay = document.getElementById('imageOverlay');
+    document.getElementById('fullImage').src = src;
+    overlay.style.display = 'flex';
 };
