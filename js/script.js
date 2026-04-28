@@ -14,31 +14,73 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// --- إعدادات المتجر ---
 let currentUserEmail = "";
 let currentLang = 'fr';
 let currentCurrency = 'XOF';
 let searchQuery = '';
-let isLoginMode = true;
+let isLoginMode = true; 
 
 const exchangeRates = { XOF: 1, MRU: 0.068 }; 
 const currencySymbols = { XOF: 'FCFA', MRU: 'UM' };
 const translations = { ar: { buyBtn: "شراء الآن" }, en: { buyBtn: "Buy Now" }, fr: { buyBtn: "Acheter" } };
 
+// --- تعريف العناصر ---
 const productsGrid = document.querySelector('.products-grid');
 const authSection = document.getElementById('authSection');
 const storeSection = document.getElementById('storeSection');
+const loginTab = document.getElementById('loginTab');
+const signupTab = document.getElementById('signupTab');
+const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+const mainBtn = document.getElementById('mainBtn');
+const authForm = document.getElementById('authForm');
 
-// --- دالة تكبير الصور (التي طلبتها) ---
-window.openImage = (src) => {
-    const overlay = document.getElementById('imageOverlay');
-    const fullImg = document.getElementById('fullImage');
-    if(overlay && fullImg) {
-        fullImg.src = src;
-        overlay.style.display = 'flex';
+// --- 1. محرك التبديل بين الدخول والتسجيل ---
+if (loginTab && signupTab) {
+    signupTab.onclick = () => {
+        isLoginMode = false;
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+        confirmPasswordGroup.style.display = 'block';
+        mainBtn.innerText = "S'inscrire";
+    };
+
+    loginTab.onclick = () => {
+        isLoginMode = true;
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+        confirmPasswordGroup.style.display = 'none';
+        mainBtn.innerText = "Se Connecter";
+    };
+}
+
+// --- 2. محرك التنفيذ (هذا ما كان ينقصك ليعمل الزر) ---
+authForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    try {
+        if (isLoginMode) {
+            // عملية تسجيل الدخول
+            await signInWithEmailAndPassword(auth, email, password);
+            alert("Bienvenue ! تم الدخول بنجاح");
+        } else {
+            // عملية إنشاء حساب جديد
+            const confirmPass = document.getElementById('authConfirmPassword').value;
+            if (password !== confirmPass) {
+                alert("كلمات المرور غير متطابقة !");
+                return;
+            }
+            await createUserWithEmailAndPassword(auth, email, password);
+            alert("Compte créé ! تم إنشاء الحساب بنجاح");
+        }
+    } catch (error) {
+        alert("خطأ: " + error.message);
     }
 };
 
-// --- محرك الدخول والخروج ---
+// --- 3. التعامل مع حالة المستخدم وزر الخروج ---
 onAuthStateChanged(auth, (user) => {
     const logoutBtn = document.getElementById('logoutBtn');
     if (user) {
@@ -54,18 +96,23 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// --- وظيفة زر تسجيل الخروج النهائية ---
+// تفعيل زر الخروج
 window.addEventListener('load', () => {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.onclick = () => {
-            signOut(auth).then(() => {
-                alert("À bientôt !");
-                window.location.reload(); 
-            }).catch(err => console.error(err));
+            signOut(auth).then(() => window.location.reload());
         };
     }
 });
+
+// --- 4. عرض المنتجات وتكبير الصور ---
+window.openImage = (src) => {
+    const overlay = document.getElementById('imageOverlay');
+    const fullImg = document.getElementById('fullImage');
+    fullImg.src = src;
+    overlay.style.display = 'flex';
+};
 
 function renderProducts() {
     if (!productsGrid) return;
@@ -76,20 +123,19 @@ function renderProducts() {
     const filtered = importedProducts.filter(p => p.name.fr.toLowerCase().includes(searchQuery.toLowerCase()));
 
     filtered.forEach(p => {
-        let price = currentCurrency === 'XOF' ? Math.round(p.originalPriceCFA) : Math.round(p.originalPriceCFA * 0.068);
+        let finalPrice = currentCurrency === 'XOF' ? Math.round(p.originalPriceCFA) : Math.round(p.originalPriceCFA * 0.068);
 
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-image" style="background-image: url('${p.image}'); cursor: zoom-in;" onclick="openImage('${p.image}')"></div>
-            <div class="product-info">
-                <h3 class="p-name" data-fr="${p.name.fr}">${p.name.fr}</h3>
-                <p class="price">${price.toLocaleString()} ${symbol}</p>
-                <button class="buy-btn">${t.buyBtn}</button>
+        productsGrid.innerHTML += `
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('${p.image}'); cursor: zoom-in;" onclick="openImage('${p.image}')"></div>
+                <div class="product-info">
+                    <h3 class="p-name" data-fr="${p.name.fr}">${p.name.fr}</h3>
+                    <p class="price">${finalPrice.toLocaleString()} ${symbol}</p>
+                    <button class="buy-btn">${t.buyBtn}</button>
+                </div>
             </div>`;
-        productsGrid.appendChild(card);
     });
     attachBuyEvents();
 }
 
-// أضف هنا باقي دوال Firebase (signIn/signUp) التي كانت لديك..
+// أضف هنا دوال attachBuyEvents و confirmOrderBtn التي كانت في ملفك الأصلي...
