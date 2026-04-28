@@ -10,7 +10,7 @@ const firebaseConfig = {
   messagingSenderId: "28443393930",
   appId: "1:28443393930:web:2ba0d8f17fe66d52db9273"
 };
-
+const rate = 0.075; // <--- غير هذا الرقم هنا فقط
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -23,6 +23,7 @@ const translations = { ar: { buyBtn: "شراء الآن" }, fr: { buyBtn: "Achet
 
 // --- وظيفة التبديل بين الدخول والإنشاء ---
 window.switchAuth = (mode) => {
+    window.rate = 0.075; // أو السعر الذي تفضله
     currentMode = mode;
     const nameGroup = document.getElementById('nameGroup');
     const confirmGroup = document.getElementById('confirmPasswordGroup');
@@ -47,6 +48,11 @@ window.switchAuth = (mode) => {
 
 // --- عرض المنتجات ---
 function renderProducts() {
+     <button onclick="openPayment('${p.name[currentLang]}', '${finalPrice} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}')">Acheter</button>
+    const isMRU = currentCurrency === 'MRU';
+// هنا نستخدم window.rate الذي عرفته أنت في السطر 26
+    const calculatedPrice = isMRU ? (product.price * window.rate).toFixed(2) : product.price;
+    const currencySymbol = currencySymbols[currentCurrency]; // سيأخذ الاختصار من السطر 21 عندك
     const productsGrid = document.querySelector('.products-grid');
     if (!productsGrid) return;
     productsGrid.innerHTML = '';
@@ -54,7 +60,7 @@ function renderProducts() {
     importedProducts.forEach(p => {
         let finalPrice = currentCurrency === 'XOF' ? 
             Math.round(p.originalPriceCFA) : 
-            Math.round(p.originalPriceCFA * 0.075);
+            Math.round(p.originalPriceCFA * 0.064);
 
         const card = document.createElement('div');
         card.className = 'product-card';
@@ -62,12 +68,57 @@ function renderProducts() {
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
                 <h3>${p.name[currentLang] || p.name.fr}</h3>
-                <p class="price-tag">${finalPrice.toLocaleString()} ${currencySymbols[currentCurrency]}</p>
+                <p class="price-tag">${finalPrice.toLocaleString()} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}</p>
                 <button class="buy-btn">${translations[currentLang].buyBtn}</button>
             </div>
         `;
         productsGrid.appendChild(card);
     });
+}
+
+const contactData = {
+    whatsapp: "+22227070586",
+    wave: "784715094",
+    bankily: "27070586"
+};
+
+let selectedProduct = "";
+
+function openPayment(name, price) {
+    selectedProduct = `${name} (${price})`;
+    document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function closePayment() {
+    document.getElementById('paymentModal').style.display = 'none';
+}
+
+function showDetails(method) {
+    const detailsDiv = document.getElementById('paymentDetails');
+    const instructions = document.getElementById('paymentInstructions');
+    detailsDiv.style.display = 'block';
+
+    if (method === 'wave') {
+        instructions.innerHTML = `Envoyez le paiement vers Wave (Sénégal) : <br> <span style="font-size: 1.4rem; color: #00a0ff;">${contactData.wave}</span>`;
+    } else {
+        instructions.innerHTML = `Envoyez le paiement vers Bankily (Mauritanie) : <br> <span style="font-size: 1.4rem; color: #1d1d1d;">${contactData.bankily}</span>`;
+    }
+}
+
+function confirmOrder() {
+    const address = document.getElementById('deliveryAddress').value;
+    if (!address) {
+        alert("Veuillez entrer votre adresse de livraison !");
+        return;
+    }
+
+    // تنبيه لقطة الشاشة بالفرنسية
+    const alertMsg = `⚠️ IMPORTANT :\n\nVeuillez prendre une CAPTURE D'ÉCRAN de la confirmation de paiement.\nVous devez envoyer cette capture sur WhatsApp avec votre commande pour confirmer l'achat.\n\nAdresse : ${address}`;
+    alert(alertMsg);
+
+    const message = `Bonjour Ebnou Store,\nJe souhaite acheter : ${selectedProduct}\nAdresse : ${address}\n(Je vais envoyer la capture d'écran du paiement maintenant)`;
+    const url = `https://wa.me/${contactData.whatsapp}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
 }
 
 // --- معالجة تسجيل الدخول / إنشاء الحساب ---
@@ -80,7 +131,7 @@ document.getElementById('authForm').onsubmit = async (e) => {
         const name = document.getElementById('authName').value;
         const confirmPass = document.getElementById('authConfirmPassword').value;
 
-        if (password !== confirmPass) { alert("كلمات السر غير متطابقة!"); return; }
+        if (password !== confirmPass) { alert("les mots de passe ne correspondent pas !"); return; }
         
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -112,7 +163,7 @@ onAuthStateChanged(auth, (user) => {
 document.getElementById('currencySelect').addEventListener('change', (e) => {
     currentCurrency = e.target.value;
     renderProducts();
-});
+   });
 
 // --- تسجيل الخروج ---
 window.handleSignOut = () => signOut(auth);
