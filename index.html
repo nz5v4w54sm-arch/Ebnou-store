@@ -10,14 +10,13 @@
 <body>
     
     <div class="top-bar">
-        <select id="langSelect">
-            <option value="ar">العربية (AR)</option>
-            <option value="fr" selected>Français (FR)</option>
-        </select>
         <select id="currencySelect">
             <option value="XOF">FCFA (CFA)</option>
             <option value="MRU">MRU (MRU)</option>
         </select>
+        <button onclick="handleSignOut()" style="background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            Déconnexion
+        </button>
     </div>
 
     <div id="authSection" class="auth-container">
