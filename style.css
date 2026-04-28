@@ -1,132 +1,135 @@
-:root {
-    --primary-color: #2563eb;
-    --bg-light: #f8fafc;
-    --text-dark: #1e293b;
-    --danger-color: #ff4d4d;
+/* التنسيق العام */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #70bbe7;
+    direction: ltr; /* للمتجر بالفرنسية */
 }
 
-body { 
-    background: linear-gradient(135deg, #8ab3dc 0%, #62a0f0 100%);
-    background-attachment: fixed;
-    font-family: 'Segoe UI', Tahoma, sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    color: var(--text-dark); 
+/* حاوية البحث وتوسيطها */
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
 }
 
-/* التعديل: شريط علوي أنيق */
-.top-bar { 
-    background-color: white; 
-    padding: 10px 40px; 
-    display: flex; 
-    justify-content: flex-end; 
-    gap: 15px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-}
-
-.top-bar select { 
-    padding: 8px 12px; 
-    border: 1px solid #cbd5e1; 
-    border-radius: 6px; 
-    cursor: pointer; 
-}
-
-/* تنسيق قسم الدخول (الخانات مرتبة ومنظمة) */
-.auth-container { 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    padding: 40px 20px; 
-    min-height: 60vh; 
-}
-
-.auth-card { 
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-    width: 100%; 
-    max-width: 400px; 
-}
-
-.auth-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
-.auth-tabs button { flex: 1; padding: 12px; border: none; background: #f1f5f9; border-radius: 8px; cursor: pointer; font-weight: bold; }
-.auth-tabs button.active { background: var(--primary-color); color: white; }
-
-.input-group { margin-bottom: 15px; text-align: right; }
-.input-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-.input-group input { 
-    width: 100%; 
-    padding: 12px; 
-    border: 2px solid #e2e8f0; 
-    border-radius: 8px; 
-    box-sizing: border-box;
-    font-size: 16px; /* لمنع الزووم في الآيفون */
+#searchBar {
+    width: 85%;
+    max-width: 500px;
+    padding: 12px 20px;
+    font-size: 16px; /* لمنع الزووم في الهاتف */
+    border: 2px solid #007bff;
+    border-radius: 25px;
+    text-align: center;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* شبكة المنتجات */
-.products-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-    gap: 25px; 
-    padding: 20px 40px; 
-    max-width: 1200px; 
-    margin: 0 auto; 
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.product-card { 
-    background: white; 
-    border-radius: 12px; 
-    overflow: hidden; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-    transition: transform 0.3s; 
+/* بطاقة المنتج وتوسيط محتواها */
+.product-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center; /* يوسط النصوص */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* يوسط العناصر أفقياً */
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
 }
 
-.product-card:hover { transform: translateY(-5px); }
-
-.product-image { 
-    height: 200px; 
-    background-size: cover; 
-    background-position: center; 
-    transition: opacity 0.3s;
+.product-card:hover {
+    transform: translateY(-5px);
 }
 
-.product-image:hover { opacity: 0.9; }
+.product-card img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
 
-/* --- الجزء الجديد: نافذة تكبير الصور (Image Overlay) --- */
-.image-overlay {
+.product-card h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* توسيط السعر */
+.product-card p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    margin: 10px 0;
+}
+
+/* توسيط زر الشراء */
+.product-card button {
+    width: 90%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.product-card button:hover {
+    background-color: #0056b3;
+}
+
+/* حاوية تكبير الصورة */
+#imageOverlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    display: none; /* مخفية افتراضياً */
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+    display: none;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    cursor: zoom-out;
 }
 
-.image-overlay img {
-    max-width: 90%;
-    max-height: 90%;
+/* أزرار تسجيل الدخول وتنسيق الخانات */
+#authSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-container {
+    background: white;
+    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
 }
 
-/* تنسيق زر الخروج */
-#logoutBtn {
-    transition: all 0.3s;
-}
-#logoutBtn:hover {
-    background-color: #e63939 !important;
-    transform: scale(1.05);
-}
-
-/* تحسين شكل الفوتر */
-.site-footer { 
-    background-color: #1e293b; 
-    color: white; 
-    padding: 40px 20px; 
-    text-align: center; 
-    margin-top: 50px; 
+#authForm input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px; /* مهم جداً لمنع زووم الهاتف */
+    box-sizing: border-box;
 }

@@ -4,18 +4,13 @@
   "description": " Ebnou shoping ",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
+  "background_color": "#007bff",
+  "theme_color": "#007bff",
   "icons": [
     {
-      "src": "favicon_io/android-chrome-192x192.png",
+      "src": "my-logo.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "favicon_io/android-chrome-512x512.png",
-      "sizes":"512x512",
-      "type":"image/png"
     }
   ]
 }
