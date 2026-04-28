@@ -131,19 +131,18 @@ document.getElementById('confirmOrderBtn')?.addEventListener('click', () => {
 document.getElementById('currencySelect')?.addEventListener('change', (e) => { currentCurrency = e.target.value; renderProducts(); });
 document.getElementById('searchInput')?.addEventListener('input', (e) => { searchQuery = e.target.value; renderProducts(); });
 document.getElementById('closeCheckout')?.addEventListener('click', () => { document.getElementById('checkoutModal').style.display = 'none'; });
-// --- التصحيح: وظيفة تسجيل الخروج الفعلي ---
-// نستخدم window.onload لضمان أن المتصفح رأى الزر في الـ HTML أولاً
+// كود المالك لإدارة الخروج
 window.addEventListener('load', () => {
-    const logoutBtn = document.getElementById('logoutBtn');
+    // نبحث عن كل أزرار الخروج (لو وجد أكثر من واحد بالخطأ)
+    const logoutButtons = document.querySelectorAll('[id="logoutBtn"]');
     
-    if (logoutBtn) {
-        logoutBtn.onclick = () => {
+    logoutButtons.forEach(btn => {
+        btn.onclick = (e) => {
+            e.preventDefault(); // منع أي تصرف غريب للمتصفح
             signOut(auth).then(() => {
-                alert("À bientôt ! تم تسجيل الخروج");
+                alert("تم تسجيل الخروج بنجاح - À bientôt !");
                 window.location.reload(); 
-            }).catch((error) => {
-                console.error("خطأ في الخروج:", error);
-            });
+            }).catch((error) => console.error("Erreur:", error));
         };
-    }
+    });
 });
