@@ -66,10 +66,10 @@ function renderProducts() {
         card.innerHTML = `
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
-                <h3>${p.name[currentLang] || p.name.fr}</h3>
+                <h3>${p.name.fr}</h3>
                 <p class="price-tag">${finalPrice.toLocaleString()} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}</p>
-                <button class="buy-btn" onclick="openPayment('${p.name[currentLang] || p.name.fr}', '${finalPrice.toLocaleString()} ${currentCurrency}')">
-                    ${translations[currentLang]?.buyBtn || translations['fr'].buyBtn}
+                <button class="buy-btn" onclick="openPayment('${p.name.fr}', '${finalPrice.toLocaleString()} ${currentCurrency}')">
+                    Acheter
                 </button>
             </div>
         `;
