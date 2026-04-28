@@ -175,3 +175,33 @@ body {
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(255,255,255,0.1);
 }
+#paymentInstructions {
+    border: 2px dashed #007bff;
+    background: #f0f8ff;
+    color: #333;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+/* Modal Styling */
+.modal {
+    display: none; position: fixed; z-index: 9999;
+    left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+    justify-content: center; align-items: center;
+}
+.modal-content {
+    background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px; position: relative; text-align: center;
+}
+.close-btn { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
+
+/* Payment Buttons */
+.payment-options { display: flex; gap: 15px; justify-content: center; }
+.pay-btn {
+    padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; border: 2px solid #eee; flex: 1; font-size: 1.1rem;
+}
+.wave-style { background-color: #00a0ff; color: white; border: none; } /* Blue for Wave */
+.bankily-style { background-color: #ffffff; color: #1d1d1d; border: 2px solid #1d1d1d; } /* White for Bankily */
+
+.whatsapp-confirm-btn {
+    background-color: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px;
+}

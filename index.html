@@ -54,6 +54,38 @@
         <img id="fullImage" src="">
     </div>
 
+    <div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closePayment()">&times;</span>
+        <h2 style="margin-bottom: 20px;">Mode de Paiement</h2>
+        
+        <div class="payment-options">
+            <button class="pay-btn bankily-style" onclick="showDetails('bankily')">Bankily</button>
+            <button class="pay-btn wave-style" onclick="showDetails('wave')">Wave</button>
+        </div>
+
+        <div id="paymentDetails" style="display:none; margin-top: 20px;">
+            <p id="paymentInstructions" style="font-weight: bold; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 2px dashed #00a0ff;"></p>
+            
+            <p style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; font-size: 0.9rem; margin: 15px 0; border: 1px solid #ffeeba;">
+                📸 <strong>Note:</strong> Veuillez prendre une capture d'écran du reçu de paiement pour l'envoyer via WhatsApp.
+            </p>
+
+            <input type="text" id="deliveryAddress" placeholder="Votre adresse de livraison complète" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+            
+            <p style="color: #d9534f; font-weight: bold; margin-top: 10px;">Livraison : sous 7 jours</p>
+            
+            <button class="whatsapp-confirm-btn" onclick="confirmOrder()">Confirmer sur WhatsApp</button>
+        </div>
+    </div>
+</div>
+
+<footer style="background: #222; color: #fff; text-align: center; padding: 30px 10px; margin-top: 50px; font-family: sans-serif;">
+    <p>Contact: Supports@ebnou-store.com</p>
+    <p style="margin: 10px 0;">&copy; 2026 Ebnou Store. All Rights Reserved.</p>
+    <p style="font-size: 0.8rem; color: #aaa;">Developed by: AHMED SALEM EBNOU</p>
+</footer>
+
     <script type="module" src="js/script.js"></script>
 </body>
 </html>
