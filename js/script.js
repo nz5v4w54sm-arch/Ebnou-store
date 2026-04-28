@@ -18,7 +18,7 @@ const auth = getAuth(app);
 let currentCurrency = 'XOF';
 let currentLang = 'fr';
 let currentMode = 'login';
-const currencySymbols = { XOF: 'FCFA', MRU: 'UM' };
+const currencySymbols = { XOF: 'CFA', MRU: 'MRU' };
 const translations = { ar: { buyBtn: "شراء الآن" }, fr: { buyBtn: "Acheter" } };
 
 // --- وظيفة التبديل بين الدخول والإنشاء ---
@@ -47,29 +47,30 @@ window.switchAuth = (mode) => {
 };
 
 // --- عرض المنتجات ---
+// --- عرض المنتجات (نسخة مطورة ومرتبطة بالدفع) ---
 function renderProducts() {
-    const isMRU = currentCurrency === 'MRU';
-// هنا نستخدم window.rate الذي عرفته أنت في السطر 26
-    const calculatedPrice = isMRU ? (product.price * window.rate).toFixed(2) : product.price;
-    const currencySymbol = currencySymbols[currentCurrency]; // سيأخذ الاختصار من السطر 21 عندك
     const productsGrid = document.querySelector('.products-grid');
     if (!productsGrid) return;
     productsGrid.innerHTML = '';
 
     importedProducts.forEach(p => {
+        // حساب السعر بناءً على العملة المختارة
         let finalPrice = currentCurrency === 'XOF' ? 
             Math.round(p.originalPriceCFA) : 
-            Math.round(p.originalPriceCFA * 0.064);
+            Math.round(p.originalPriceCFA * 0.075);
 
         const card = document.createElement('div');
         card.className = 'product-card';
-        <button onclick="handleSignOut()" style="margin: 10px; background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Déconnexion</button>
+        
+        // ربطنا الزر الآن بدالة openPayment لفتح نافذة الدفع
         card.innerHTML = `
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
                 <h3>${p.name[currentLang] || p.name.fr}</h3>
                 <p class="price-tag">${finalPrice.toLocaleString()} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}</p>
-                <button class="buy-btn">${translations[currentLang].buyBtn}</button>
+                <button class="buy-btn" onclick="openPayment('${p.name[currentLang] || p.name.fr}', '${finalPrice.toLocaleString()} ${currentCurrency}')">
+                    ${translations[currentLang]?.buyBtn || translations['fr'].buyBtn}
+                </button>
             </div>
         `;
         productsGrid.appendChild(card);
