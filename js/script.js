@@ -48,7 +48,6 @@ window.switchAuth = (mode) => {
 
 // --- عرض المنتجات ---
 function renderProducts() {
-     <button onclick="openPayment('${p.name[currentLang]}', '${finalPrice} ${currentCurrency === 'XOF' ? 'FCFA' : 'MRU'}')">Acheter</button>
     const isMRU = currentCurrency === 'MRU';
 // هنا نستخدم window.rate الذي عرفته أنت في السطر 26
     const calculatedPrice = isMRU ? (product.price * window.rate).toFixed(2) : product.price;
@@ -64,6 +63,7 @@ function renderProducts() {
 
         const card = document.createElement('div');
         card.className = 'product-card';
+        <button onclick="handleSignOut()" style="margin: 10px; background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Déconnexion</button>
         card.innerHTML = `
             <div class="product-image" style="background-image: url('${p.image}');" onclick="openImage('${p.image}')"></div>
             <div class="product-info">
