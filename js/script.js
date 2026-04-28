@@ -60,14 +60,19 @@ if (loginTab && signupTab) {
 
 // --- التعامل مع حالة المستخدم (Firebase) ---
 onAuthStateChanged(auth, (user) => {
+    const logoutBtn = document.getElementById('logoutBtn');
     if (user) {
         currentUserEmail = user.email;
         authSection.style.display = 'none';
         storeSection.style.display = 'block';
+        // إظهار الزر عند الدخول
+        if (logoutBtn) logoutBtn.style.display = 'block'; 
         renderProducts();
     } else {
         authSection.style.display = 'flex';
         storeSection.style.display = 'none';
+        // إخفاء الزر عند الخروج
+        if (logoutBtn) logoutBtn.style.display = 'none'; 
     }
 });
 
@@ -126,3 +131,19 @@ document.getElementById('confirmOrderBtn')?.addEventListener('click', () => {
 document.getElementById('currencySelect')?.addEventListener('change', (e) => { currentCurrency = e.target.value; renderProducts(); });
 document.getElementById('searchInput')?.addEventListener('input', (e) => { searchQuery = e.target.value; renderProducts(); });
 document.getElementById('closeCheckout')?.addEventListener('click', () => { document.getElementById('checkoutModal').style.display = 'none'; });
+// --- التصحيح: وظيفة تسجيل الخروج الفعلي ---
+// نستخدم window.onload لضمان أن المتصفح رأى الزر في الـ HTML أولاً
+window.addEventListener('load', () => {
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    if (logoutBtn) {
+        logoutBtn.onclick = () => {
+            signOut(auth).then(() => {
+                alert("À bientôt ! تم تسجيل الخروج");
+                window.location.reload(); 
+            }).catch((error) => {
+                console.error("خطأ في الخروج:", error);
+            });
+        };
+    }
+});
