@@ -1,7 +1,7 @@
 import { importedProducts } from './products.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
+let selectedProduct = "";
 const firebaseConfig = {
   apiKey: "AIzaSyCI60T3r88_PBhRxc9zV2tCeGC59GbOW4A",
   authDomain: "ebnou-store.firebaseapp.com",
@@ -78,12 +78,11 @@ function renderProducts() {
 }
 
 const contactData = {
-    whatsapp: "+22227070586",
+    whatsapp: "221784715094",
     wave: "784715094",
-    bankily: "27070586"
+    bankily: "27070586",
 };
 
-let selectedProduct = "";
 
 window.openPayment = (name, price) => {
     selectedProduct = `${name} (${price})`;
@@ -109,11 +108,23 @@ window.showDetails = (method) => {
 };
 
 window.confirmOrder = () => {
-    const address = document.getElementById('deliveryAddress').value;
-    if (!address) {
+    const addressInput = document.getElementById('deliveryAddress');
+    const address = addressInput ? addressInput.value : "";
+    if (!address || address.trim()=== "") {
         alert("Veuillez entrer votre adresse de livraison !");
         return;
     }
+
+    // تنبيه لقطة الشاشة
+    const alertMsg = `⚠️ IMPORTANT :\n\nVeuillez prendre une CAPTURE D'ÉCRAN de la confirmation de paiement.\nEnvoyez-la sur WhatsApp مع طلبك لتاكيد الشراء.\n\nAdresse : ${address}`;
+    alert(alertMsg);
+
+    // تجهيز الرسالة والرابط
+    const message = `Bonjour Ebnou Store,\nJe souhaite acheter : ${selectedProduct}\nAdresse : ${address}\n(Capture d'écran incluse)`;
+    const whatsappUrl = `https://wa.me/221${contactData.whatsapp}?text=${encodeURIComponent(message)}`;
+    
+    // الأمر الذي يفتح الواتساب
+    window.open(whatsappUrl, '_blank');
 };
 // --- معالجة تسجيل الدخول / إنشاء الحساب ---
 document.getElementById('authForm').onsubmit = async (e) => {
