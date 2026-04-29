@@ -169,16 +169,21 @@ document.getElementById('authForm').onsubmit = async (e) => {
 };
 
 // --- مراقبة حالة المستخدم ---
+// --- مراقبة حالة تسجيل الدخول ---
 onAuthStateChanged(auth, (user) => {
     const authSection = document.getElementById('authSection');
     const storeSection = document.getElementById('storeSection');
+    const topBar = document.getElementById('mainTopBar'); // تأكد من إضافة هذا السطر
+
     if (user) {
         authSection.style.display = 'none';
         storeSection.style.display = 'block';
+        if (topBar) topBar.style.display = 'flex'; // يظهر الشريط عند الدخول
         renderProducts();
     } else {
         authSection.style.display = 'flex';
         storeSection.style.display = 'none';
+        if (topBar) topBar.style.display = 'none'; // يختفي الشريط عند الخروج
     }
 });
 
