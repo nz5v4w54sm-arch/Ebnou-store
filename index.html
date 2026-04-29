@@ -20,7 +20,7 @@
         </button>
     </div>
 
-    <div id="authSection" class="auth-container">
+   <div id="authSection" class="auth-container">
         <div class="auth-card">
             <div class="auth-tabs">
                 <button id="loginTab" class="active" onclick="switchAuth('login')">Connexion</button>
@@ -31,32 +31,45 @@
                 <div class="input-group" id="nameGroup" style="display: none;">
                     <input type="text" id="authName" placeholder="Nom Complet">
                 </div>
+
                 <div class="input-group">
                     <input type="email" id="authEmail" placeholder="Email" required>
                 </div>
+
                 <div class="input-group">
                     <input type="password" id="authPassword" placeholder="Mot de passe" required>
                 </div>
+
+                <!-- رابط نسيت كلمة السر: مكانه الصحيح بالفرنسية -->
+                <div id="forgotPasswordLink" style="text-align: right; margin-top: -5px; margin-bottom: 15px;">
+                    <a href="#" onclick="resetPassword(); return false;" style="color: #007bff; text-decoration: none; font-size: 12px; font-family: sans-serif;">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
                 <div class="input-group" id="confirmPasswordGroup" style="display: none;">
                     <input type="password" id="authConfirmPassword" placeholder="Confirmer mot de passe">
                 </div>
-                <button type="submit" class="buy-btn" id="mainBtn" style="width: 100% !important;">Se Connecter</button>
+
+                <button type="submit" class="buy-btn" id="mainBtn" style="width: 100% !important; background-color: #28a745;">Se Connecter</button>
                 
                 <div style="text-align: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
-    <p style="font-size: 13px; color: #888; margin-bottom: 15px; font-family: sans-serif;">Ou se connecter avec</p>
-    
-    <div style="display: flex; justify-content: center; gap: 20px;">
-        <button id="login-google-btn" type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google" style="width: 22px;">
-        </button>
-
-        <button type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: default; opacity: 0.4;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" style="width: 20px; padding-bottom: 2px;">
-        </button>
+                    <p style="font-size: 13px; color: #888; margin-bottom: 15px; font-family: sans-serif;">Ou se connecter avec</p>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                        <button id="login-google-btn" onclick="loginWithGoogle()" type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google" style="width: 22px;">
+                        </button>
+                        <button type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: default; opacity: 0.4;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" style="width: 20px; padding-bottom: 2px;">
+                        </button>
+                    </div>
+                </div>
+            </form> <!-- تأكد من وجود وسم إغلاق واحد فقط هنا -->
+        </div>
     </div>
-</div>
 
-            </form>
+</form>
+
         </div>
     </div>
 
@@ -184,45 +197,10 @@
         <p style="margin-top: 15px; font-size: 0.8rem; color: #777;">&copy; 2026 Ebnou Store. All Rights Reserved. Developed by: AHMED SALEM EBNOU</p>
     </footer>
 
-    <script type="module" src="js/script.js"></script>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 
-    <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCI60T3r88_PBhRxc9zV2tCeGC59GbOW4A",
-    authDomain: "ebnou-store.firebaseapp.com",
-    projectId: "ebnou-store",
-    storageBucket: "ebnou-store.firebasestorage.app",
-    messagingSenderId: "28443393930",
-    appId: "1:28443393930:web:2ba0d8f17fe66d52db9273",
-    measurementId: "G-28WHYBT44N"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth();
-  const provider = new GoogleAuthProvider();
-
-  // تفعيل ضغطة زر جوجل فقط
-  const googleBtn = document.getElementById('login-google-btn');
-  if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          alert("Bienvenue, " + result.user.displayName);
-          window.location.reload(); 
-        })
-        .catch((error) => {
-          console.error("Erreur:", error.message);
-        });
-    });
-  }
- </script>
+    <script type="module" src="./js/script.js"></script>
 
 </body>
 </html>
