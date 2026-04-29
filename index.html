@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="my-logo.png">
 </head>
 <body>
-    
+
     <div class="top-bar">
         <select id="currencySelect">
             <option value="XOF">FCFA (CFA)</option>
@@ -41,6 +41,21 @@
                     <input type="password" id="authConfirmPassword" placeholder="Confirmer mot de passe">
                 </div>
                 <button type="submit" class="buy-btn" id="mainBtn" style="width: 100% !important;">Se Connecter</button>
+                
+                <div style="text-align: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+    <p style="font-size: 13px; color: #888; margin-bottom: 15px; font-family: sans-serif;">Ou se connecter avec</p>
+    
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <button id="login-google-btn" type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google" style="width: 22px;">
+        </button>
+
+        <button type="button" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; display: flex; align-items: center; justify-content: center; cursor: default; opacity: 0.4;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" style="width: 20px; padding-bottom: 2px;">
+        </button>
+    </div>
+</div>
+
             </form>
         </div>
     </div>
@@ -158,21 +173,56 @@
     </div>
 </section>
 
-<footer style="background: #222; color: #fff; text-align: center; padding: 30px 10px; margin-top: 50px; font-family: sans-serif;">
-    <p>Contact us: Supports@ebnou-store.online</p>
-    <div style="margin-top: 10px;">
-        <a href="about.html" style="color: #aaa; text-decoration: none; font-size: 0.8rem; margin: 0 10px;">about us</a> | 
-        <a href="privacy.html" style="color: #aaa; text-decoration: none; font-size: 0.8rem; margin: 0 10px;">privacy</a>
-    </div>
+    <footer style="background: #222; color: #fff; text-align: center; padding: 30px 10px; margin-top: 50px; font-family: sans-serif;">
+        <p>Contact us: Supports@ebnou-store.online</p>
+         <div style="margin-top: 10px;">
+            <a href="about.html" style="color: #aaa; text-decoration: none; font-size: 0.8rem; margin: 0 10px;">about us</a> | 
+            <a href="privacy.html" style="color: #aaa; text-decoration: none; font-size: 0.8rem; margin: 0 10px;">privacy</a>
+         </div>
 
 
-    <p style="margin-top: 15px; font-size: 0.8rem; color: #777;">&copy; 2026 Ebnou Store. All Rights Reserved. Developed by: AHMED SALEM EBNOU</p>
-</footer>
+        <p style="margin-top: 15px; font-size: 0.8rem; color: #777;">&copy; 2026 Ebnou Store. All Rights Reserved. Developed by: AHMED SALEM EBNOU</p>
+    </footer>
 
     <script type="module" src="js/script.js"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
+
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCI60T3r88_PBhRxc9zV2tCeGC59GbOW4A",
+    authDomain: "ebnou-store.firebaseapp.com",
+    projectId: "ebnou-store",
+    storageBucket: "ebnou-store.firebasestorage.app",
+    messagingSenderId: "28443393930",
+    appId: "1:28443393930:web:2ba0d8f17fe66d52db9273",
+    measurementId: "G-28WHYBT44N"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  // تفعيل ضغطة زر جوجل فقط
+  const googleBtn = document.getElementById('login-google-btn');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          alert("Bienvenue, " + result.user.displayName);
+          window.location.reload(); 
+        })
+        .catch((error) => {
+          console.error("Erreur:", error.message);
+        });
+    });
+  }
+ </script>
+
 </body>
 </html>
