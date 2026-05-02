@@ -1,6 +1,7 @@
 import { importedProducts } from './products.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged,  signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 let selectedProduct = "";
 
 const firebaseConfig = {
@@ -173,18 +174,15 @@ document.getElementById('authForm').onsubmit = async (e) => {
 onAuthStateChanged(auth, (user) => {
     const authSection = document.getElementById('authSection');
     const storeSection = document.getElementById('storeSection');
-    const topBar = document.getElementById('mainTopBar'); // تأكد من إضافة هذا السطر
+    const topBar = document.getElementById('mainTopBar');
 
-    if (user) {
-        authSection.style.display = 'none';
-        storeSection.style.display = 'block';
-        if (topBar) topBar.style.display = 'flex'; // يظهر الشريط عند الدخول
-        renderProducts();
-    } else {
-        authSection.style.display = 'flex';
-        storeSection.style.display = 'none';
-        if (topBar) topBar.style.display = 'none'; // يختفي الشريط عند الخروج
-    }
+    // إجبار الموقع على فتح المتجر وإخفاء شاشة التسجيل للجميع
+    if (authSection) authSection.style.display = 'none';       
+    if (storeSection) storeSection.style.display = 'block';    
+    if (topBar) topBar.style.display = 'flex';                 
+    
+    // تحميل المنتجات فوراً ليراها جوجل
+    renderProducts(); 
 });
 
 // --- تغيير العملة ---
@@ -204,14 +202,25 @@ window.openImage = (src) => {
 };
 // وظيفة تسجيل الدخول بجوجل (للأيقونة الدائرية)
 window.loginWithGoogle = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      alert("Bienvenue, " + result.user.displayName);
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error("Erreur:", error.message);
-    });
+    const provider = new GoogleAuthProvider();
+    
+    // استخدام signInWithPopup مع معالجة سريعة للنتيجة
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            console.log("Connexion réussie !");
+            // بدلاً من التحديث العادي، سنقوم بالتحديث فوراً وبقوة
+            // لضمان إغلاق النافذة المنبثقة فوراً
+            setTimeout(() => {
+                window.location.reload();
+            }, 100); // تحديث بعد 100 جزء من الثانية فقط
+        })
+        .catch((error) => {
+            if (error.code === 'auth/popup-closed-by-user') {
+                console.log("L'utilisateur a fermé la fenêtre.");
+            } else {
+                alert("Erreur Google: " + error.message);
+            }
+        });
 };
 
 // وظيفة استعادة كلمة السر (للزر الذي طلبته)
